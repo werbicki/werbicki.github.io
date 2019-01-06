@@ -247,3 +247,5 @@ Changes to the testing of UText in cintltst started with simple test cases for O
 # Conclusion
 
 This work addresses areas of UBiDi and UText that have the potential to unlock further improvements. UBiDi confirmance to UText may allow for UBiDi to also be extended to confirm with UBreak and the BreakIterator interface. Also, with full functionality support in UText for writable buffers, other areas of the ICU library may be more easily standardized on using UText.
+
+**This work has been useful to me, and I would like the opportunity to have it reviewed to see if it is fit for inclusion in ICU.**

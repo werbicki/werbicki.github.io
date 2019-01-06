@@ -25,6 +25,8 @@ github_username:  werbicki@criticaljunction
 # Build settings
 markdown: kramdown
 #theme: minima
+
+# https://github.com/mmistakes/so-simple-theme
 remote_theme: "mmistakes/so-simple-theme"
 plugins:
   - jekyll-feed
