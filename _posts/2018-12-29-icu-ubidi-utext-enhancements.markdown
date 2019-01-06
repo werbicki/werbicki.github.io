@@ -5,9 +5,11 @@ date:   2018-12-29 12:00:00 -0700
 categories: [C++]
 tags: [ICU, Text]
 ---
-Currently there are few complete implementations of the Unicode Standard Annex #9: The Bidirectional Algorithm. The most popular include ICU, FriBiDi, Uniscribe, DirectWrite, and Core Text. Uniscribe and DirectWrite and Windows are only, and Core Text is OSX only. Of the remaining two, ICU’s UBiDi implementation (UBiDi) is the most desirable due the to additional library functionality available in a single package. One disadvantage of UBiDi is that is only functions on UTF-16 (UChar) arrays. In other functions within the ICU library, the UText abstraction facility is used to allow any text storage and encoding provider to be used, however, UBiDi currently does not support UText. One of the reasons for the lack of support is the ubidi_writeReordered() and ubidi_writeReverse() functions which write to the provided UChar arrays. The implementation of the UChar UText Provider currently does not support write operations.
+Currently there are few complete implementations of the Unicode Standard Annex #9: The Bidirectional Algorithm. The most popular include International Components for Unicode (ICU), FriBiDi, Uniscribe, DirectWrite, and Core Text. Uniscribe and DirectWrite and Windows are only, and Core Text is OSX only. Of the remaining two, ICU’s UBiDi implementation (UBiDi) is the most desirable due the to additional library functionality available in a single package. One disadvantage of UBiDi is that is only functions on UTF-16 (UChar) arrays. In other functions within the ICU library, the UText abstraction facility is used to allow any text storage and encoding provider to be used, however, UBiDi currently does not support UText. One of the reasons for the lack of support is the ubidi_writeReordered() and ubidi_writeReverse() functions which write to the provided UChar arrays. The implementation of the UChar UText Provider currently does not support write operations.
 
 Allowing UBiDi to support UText closes an important gap in developing a text stack for displaying and manipulating text in a platform independent way. Currently the use of UBiDi for encodings other than UTF-16 requires conversion to and from a UTF-16 buffer which can increase memory usage. The ability for UBiDi to support UText allows for the use of a single abstracted storage buffer right up to the point where glyph mapping and shaping occur. It also decreases the complexity of having to map index locations for bidirectional between encodings.
+
+The information in this post is relevant to ICU 63.1.
 
 This work should cover the following tickets:
 * [ICU-5544](https://unicode-org.atlassian.net/browse/ICU-5544 "ICU-5544") RFE: Add UText support to bidi APIs
@@ -122,7 +124,7 @@ utext_openUTF8(UText *ut,
 
 The existing functions would have their parameters passed to the new API function in order to retain backwards compatibility:
 
-Looking at the UnicodeString UText Provider, the work “Const” is used to differentiate between read-only and read/write entry points in the UnicodeString. Given the different naming for the UChar and uint8_t UText Providers, this is not possible since both are read-only yet do not use the Const keyword. Therefore, a new set of consistent names is proposed along with a function to test for a valid UText:
+Looking at the UnicodeString UText Provider, the work “Const” is used to differentiate between read-only and read/write entry points in the UnicodeString. Given the different naming for the UChar and uint8_t UText Providers, this is not possible since both are read-only yet do not use the Const keyword. Therefore, a new set of consistent names is proposed:
 
 ```c++
 UText * utext_openConstU16(UText *ut, 
@@ -148,8 +150,6 @@ UText * utext_openConstU32(UText *ut,
 UText * utext_openU32(UText *ut, 
                       UChar32 *s, int64_t length, int64_t capacity, 
                       UErrorCode *status);
-
-UBool utext_isValid(const UText* ut);
 ```
 
 The use of the work “Const” corresponds to the const array parameter passed into the UText Provider. The use of the “U#” matches the use of “U#” in the utf8.h/utf16.h files where it is shorthand for UTF-8 (U8), and UTF-16 (U16). Additionally a UText UChar32 Provider for UTF-32 (U32) completes all of the array encodings that would be desirable (UTF-32 can be a good storage mechanism for glyph manipulation).
@@ -209,12 +209,18 @@ Although this works for C++, this approach is not ANSI-C compliant, and causes a
 
 Therefore, the third approach of overloading the pointer to UText->b to treat UText->b and UText->c as 64-bit of memory is used.
 
+An addition to the UText library functions is also proposed to provide a validity check for a UText. This is used internally by UText library functions to determine if the UText provided is valid before performing the operation. By exposing this function, library callers have the ability to valid the UText and handle exceptions prior to making any UText library function calls.
+
+```c++
+UBool utext_isValid(const UText* ut);
+```
+
 Changes are required to the following files:
 * source/common/utext.h
 * source/common/utext.cpp
 * source/test/cintltst/utxttest.c
 
-The existing implementations of UChar and uint8_t UText Providers were not re-used. Instead, new implementations were coded with remnants of the existing code. Full support for 64-bit lengths is included in each implementation. Separate tracking of length vs. capacity of arrays was also implemented. Extensive comments were used to help future UText developers in understanding the internal workings of a UText abstraction.
+The existing implementations of UChar and uint8_t UText Providers were not re-used. Instead, new implementations were coded with remnants of the existing code. Full support for 64-bit lengths is included in each implementation. Separate tracking of length vs. capacity of arrays was also implemented. Extensive comments were used to help future UText Provider Developers in understanding the internal workings of a UText abstraction. A seperate guide to writing a UText Provider is the subject of the next post on this blog.
 
 Use of the chunkContents was added to the UChar UText Provider to allow for 32-bit addressing with 64-bit length/capacity.
 
@@ -240,4 +246,4 @@ Changes to the testing of UText in cintltst started with simple test cases for O
 
 # Conclusion
 
-This work has been useful to me and I would like the opportunity to have it reviewed to see if it is fit for inclusion in ICU.
+This work addresses areas of UBiDi and UText that have the potential to unlock further improvements. UBiDi confirmance to UText may allow for UBiDi to also be extended to confirm with UBreak and the BreakIterator interface. Also, with full functionality support in UText for writable buffers, other areas of the ICU library may be more easily standardized on using UText.
