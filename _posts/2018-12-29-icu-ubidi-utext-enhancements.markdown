@@ -215,6 +215,12 @@ An addition to the UText library functions is also proposed to provide a validit
 UBool utext_isValid(const UText* ut);
 ```
 
+Finally, it is proposed that the shallowTextClone() function that is local to the utext.cpp file be promoted to an API function to provide a consistent way for UText Providers to implement thier UTextCLose functions.
+
+```c++
+UText *utext_shallowClone(UText * dest, const UText * src, UErrorCode * status);
+```
+
 Changes are required to the following files:
 * source/common/utext.h
 * source/common/utext.cpp
