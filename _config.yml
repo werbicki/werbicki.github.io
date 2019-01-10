@@ -14,6 +14,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Paul's Notes
+author:
+  name: Paul Werbicki
 email: werbicki@criticaljunction.com
 description: >- # this means to ignore newlines until "baseurl:"
   Random notes on deep dives into truly meaningless efforts that make me happy.
@@ -21,6 +23,7 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: PaulWerbicki
 github_username:  werbicki@criticaljunction
+copyright: "&copy; {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}"
 
 # Build settings
 markdown: kramdown
