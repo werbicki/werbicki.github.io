@@ -23,7 +23,7 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: PaulWerbicki
 github_username:  werbicki@criticaljunction
-copyright: "&copy; {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}"
+#copyright: "&copy; {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}"
 
 # Build settings
 markdown: kramdown
