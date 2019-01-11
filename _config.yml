@@ -16,23 +16,36 @@
 title: Paul's Notes
 author:
   name: Paul Werbicki
-email: werbicki@criticaljunction.com
+  picture: /assets/images/Computer.png
+  email: werbicki@criticaljunction.com
+footer_links:
+  - title: LinkedIn
+    url: https://ca.linkedin.com/in/paul-werbicki-a524bb1
+    icon: fab fa-linkedin
+  - title: GitHub
+    url: https://github.com/werbicki
+    icon: fab fa-github-square
 description: >- # this means to ignore newlines until "baseurl:"
   Random notes on deep dives into truly meaningless efforts that make me happy.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: PaulWerbicki
-github_username:  werbicki@criticaljunction
-#copyright: "&copy; {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}"
+logo: "/assets/images/Computer.png"
+
+# Liquid
+liquid:
+  error_mode: strict
 
 # Build settings
 markdown: kramdown
-#theme: minima
 
 # https://github.com/mmistakes/so-simple-theme
 remote_theme: "mmistakes/so-simple-theme"
 plugins:
   - jekyll-feed
+
+# Taxonomy pages
+#category_archive_path: "/categories/#"
+#tag_archive_path: "/tags/#"
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
