@@ -18,7 +18,43 @@
     {% if site.copyright %}
       {{ site.copyright | markdownify }}
     {% else %}
-      <p>&copy; {{ site.time | date: '%Y' }} {{ site.author.name | default: site.title }}.</p>
+      <p>&copy; {{ page.date | date: '%Y' }} {{ site.author.name | default: site.title }}.</p>
     {% endif %}
   </div>
 </footer>
+
+<script type="text/javascript">
+    window.onload = chooseSiteLogo;
+    var siteLogos = new Array(
+        "Blur.png",
+        "Cement.png",
+        "ChalkSketch.png",
+        "Computer.png",
+        "CrisscrossEtching.png",
+        "Cutout.png",
+        "FilmGrain.png",
+        "Glass.png",
+        "GlowDiffused.png",
+        "GlowEdges.png",
+        "LightScreen.png",
+        "LineDrawing.png",
+        "Marker.png",
+        "MosaicBubbles.png",
+        "PaintBrush.png",
+        "PaintStrokes.png",
+        "PastelsSmooth.png",
+        "PencilGreyscale.png",
+        "PencilSketch.png",
+        "Photocopy.png",
+        "PlasticWrap.png",
+        "Texturizer.png",
+        "WatercolorSponge.png"
+    );
+
+    function chooseSiteLogo()
+    {
+        var randomNum = Math.floor(Math.random() * siteLogos.length);
+        document.getElementById("site-logo").src = "/assets/images/" + siteLogos[randomNum];
+    }
+</script>
+
