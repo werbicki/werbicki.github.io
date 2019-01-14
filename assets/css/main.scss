@@ -4,11 +4,28 @@
 
 @import "so-simple";
 
+a {
+    -webkit-transition: none;
+    transition: none;
+}
+
 .site-logo-img {
     border-radius: 0;
+}
+
+.fadeIn {
+    -webkit-animation-name: none;
+    animation-name: none;
 }
 
 .fadeInDown {
     -webkit-animation-name: none;
     animation-name: none;
+}
+
+.animated {
+    -webkit-animation-fill-mode: none;
+    animation-fill-mode: none;
+    -webkit-animation-duration: 0;
+    animation-duration: 0;
 }
