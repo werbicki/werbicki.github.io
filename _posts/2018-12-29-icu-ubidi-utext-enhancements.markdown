@@ -11,6 +11,8 @@ Allowing UBiDi to support UText closes an important gap in developing a text sta
 
 The information in this post is relevant to ICU 63.1.
 
+A Ticket has been submitted to correspond to this post: [ICU-20361](https://unicode-org.atlassian.net/browse/ICU-20361 "ICU-20361") UBiDi and UText Enhancements Roll-up
+
 This work should cover the following tickets:
 * [ICU-5544](https://unicode-org.atlassian.net/browse/ICU-5544 "ICU-5544") RFE: Add UText support to bidi APIs
 * [ICU-6861](https://unicode-org.atlassian.net/browse/ICU-6861 "ICU-6861") UText, handling of errors on open()
@@ -20,7 +22,7 @@ This work should cover the following tickets:
 * [ICU-13481](https://unicode-org.atlassian.net/browse/ICU-13481 "ICU-13481") UText, remove duplicated OPEN state.
 * [ICU-20258](https://unicode-org.atlassian.net/browse/ICU-20258 "ICU-20258") Missing information about header and library in API documentation of UText
 
-**Currently this work is being submitted to ICU for Acceptance and Review. I am awaiting how best to attach this to an ICU Ticket given that it spans many other Tickets. Once I have that resolved I will Commit to my Fork and Branch, and update the files listed below with links to the actual proposed code.**
+**Currently this work is being submitted to ICU for Acceptance and Review. Links below point to Repository/Branch of future Pull Request.**
 
 # Design Goals and Principles
 
@@ -98,11 +100,11 @@ Converting UBiDi over to use UText involves changes to the struct UBiDi in ubidi
 In order to retain backwards compatibility a new (different) UChar * pointer is added to struct UBiDi which is returned by ubidi_getText() only if the UChar * version of the API functions were called, otherwise this will return NULL. ubidi_getUText() is the preferred way to retrieve the text associated with a struct UBiDi and should always return a valid UText.
 
 Changes are required to the following files to support the internal use of UText:
-* source/common/ubidi.h
-* source/common/ubidiimp.h
-* source/common/ubidi.cpp
-* source/common/ubidiln.cpp
-* source/common/ubidiwrt.cpp
+* [source/common/unicode/ubidi.h](https://github.com/werbicki/icu/blob/UBiDi-and-UText-Enhancements/icu4c/source/common/unicode/ubidi.h "source/common/unicode/ubidi.h")
+* [source/common/ubidiimp.h](https://github.com/werbicki/icu/blob/UBiDi-and-UText-Enhancements/icu4c/source/common/ubidiimp.h "source/common/ubidiimp.h")
+* [source/common/ubidi.cpp](https://github.com/werbicki/icu/blob/UBiDi-and-UText-Enhancements/icu4c/source/common/ubidi.cpp "source/common/ubidi.cpp")
+* [source/common/ubidiln.cpp](https://github.com/werbicki/icu/blob/UBiDi-and-UText-Enhancements/icu4c/source/common/ubidiln.cpp "source/common/ubidiln.cpp")
+* [source/common/ubidiwrt.cpp](https://github.com/werbicki/icu/blob/UBiDi-and-UText-Enhancements/icu4c/source/common/ubidiwrt.cpp "source/common/ubidiwrt.cpp")
 
 In making changes to the ubidi_writeReordered() and ubidi_writeReverse() functions, the deficiencies of the existing UText UChar Provider became apparent. This necessitates work on the existing UText UChar Provider.
 
@@ -222,9 +224,9 @@ UText *utext_shallowClone(UText * dest, const UText * src, UErrorCode * status);
 ```
 
 Changes are required to the following files:
-* source/common/utext.h
-* source/common/utext.cpp
-* source/test/cintltst/utxttest.c
+* [source/common/unicode/utext.h](https://github.com/werbicki/icu/blob/UBiDi-and-UText-Enhancements/icu4c/source/common/unicode/utext.h "source/common/unicode/utext.h")
+* [source/common/utext.cpp](https://github.com/werbicki/icu/blob/UBiDi-and-UText-Enhancements/icu4c/source/common/utext.cpp "source/common/utext.cpp")
+* [source/test/cintltst/utxttest.c](https://github.com/werbicki/icu/blob/UBiDi-and-UText-Enhancements/icu4c/source/test/cintltst/utexttst.c "source/test/cintltst/utxttest.c")
 
 The existing implementations of UChar and uint8_t UText Providers were not re-used. Instead, new implementations were coded with remnants of the existing code. Full support for 64-bit lengths is included in each implementation. Separate tracking of length vs. capacity of arrays was also implemented. Extensive comments were used to help future UText Provider Developers in understanding the internal workings of a UText abstraction. A seperate guide to writing a UText Provider is the subject of the next post on this blog.
 
